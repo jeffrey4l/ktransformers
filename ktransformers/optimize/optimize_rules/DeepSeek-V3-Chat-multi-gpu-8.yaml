@@ -100,7 +100,7 @@
     kwargs:
       generate_device: "cuda:0"
       prefill_device: "cuda:0"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # GPU 1: layers 8–15
@@ -112,7 +112,7 @@
     kwargs:
       generate_device: "cuda:1"
       prefill_device: "cuda:1"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # GPU 2: layers 16–23
@@ -124,7 +124,7 @@
     kwargs:
       generate_device: "cuda:2"
       prefill_device: "cuda:2"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # GPU 3: layers 24–31
@@ -136,7 +136,7 @@
     kwargs:
       generate_device: "cuda:3"
       prefill_device: "cuda:3"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # GPU 4: layers 32–39
@@ -148,7 +148,7 @@
     kwargs:
       generate_device: "cuda:4"
       prefill_device: "cuda:4"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # GPU 5: layers 40–47
@@ -160,7 +160,7 @@
     kwargs:
       generate_device: "cuda:5"
       prefill_device: "cuda:5"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # GPU 6: layers 48–55
@@ -172,7 +172,7 @@
     kwargs:
       generate_device: "cuda:6"
       prefill_device: "cuda:6"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # GPU 7: layers 56–63
@@ -184,7 +184,7 @@
     kwargs:
       generate_device: "cuda:7"
       prefill_device: "cuda:7"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 
@@ -721,7 +721,7 @@
     kwargs:
       generate_device: "cuda:7"
       prefill_device: "cuda:7"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 # For final modules (model.norm), ensure they are on GPU 7 (as in your original config)

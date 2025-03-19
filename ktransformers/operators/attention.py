@@ -272,6 +272,13 @@ class KDeepseekV2Attention(BaseInjectedModule, DeepseekV2Attention):
             print("position_ids", torch.isnan(position_ids).any())
             """
 
+            original_dtype = query_states.dtype
+            target_dtype = torch.half
+            query_states = query_states.to(target_dtype)
+            compressed_kv_with_k_pe = compressed_kv_with_k_pe.to(target_dtype)
+            compressed_kv = compressed_kv.to(target_dtype)
+            attn_output = attn_output.to(target_dtype)
+
             # flash attn doesn't support head_dim bigger than 256
             # use triton attention kernel adapted from vLLM and SGLang for MQA
             decode_attention_fwd_grouped(query_states, compressed_kv_with_k_pe, compressed_kv, attn_output,
@@ -280,6 +287,7 @@ class KDeepseekV2Attention(BaseInjectedModule, DeepseekV2Attention):
                              4, #num_kv_splits # follow vLLM, fix it TODO
                              self.softmax_scale,
                              past_key_value.page_size)
+            attn_output = attn_output.to(original_dtype)
             
             # attn_output [bsz, q_len, self.num_heads, self.kv_lora_rank]
             # out_absorb [self.num_heads, self.v_head_dim, self.kv_lora_rank]
@@ -321,13 +329,20 @@ class KDeepseekV2Attention(BaseInjectedModule, DeepseekV2Attention):
             value_states = value_states.view(bsz, kv_seq_len, self.num_heads, self.v_head_dim)
             value_states_padded = torch.nn.functional.pad(value_states, [0, query_states.shape[-1] - value_states.shape[-1]], value=0)
 
-            attn_output = flash_attn_func(
-                query_states,
-                key_states,
-                value_states_padded,
-                softmax_scale=self.softmax_scale,
-                causal=True,
-            )
+            # attn_output = flash_attn_func(
+            #     query_states,
+            #     key_states,
+            #     value_states_padded,
+            #     softmax_scale=self.softmax_scale,
+            #     causal=True,
+            # )
+            attn_output = F.scaled_dot_product_attention(
+                query_states.transpose(1, 2),
+                key_states.transpose(1, 2),
+                value_states_padded.transpose(1, 2),
+                scale=self.softmax_scale,
+                is_causal=True
+            ).transpose(1, 2)
 
             if self.q_head_dim != self.v_head_dim:
                 attn_output = attn_output[:, :, :, : self.v_head_dim]

@@ -13,11 +13,11 @@ setup(
                 # 'gptq_marlin_repack.cu',
             ],
             extra_compile_args={
-                'cxx': ['-O3'],
+                'cxx': ['-O3', '-D_GLIBCXX_USE_CXX11_ABI=1'],
                 'nvcc': [
                     '-O3',
                     '--use_fast_math',
-                    '-Xcompiler', '-fPIC',
+                    '-Xcompiler', '-fPIC', '-D_GLIBCXX_USE_CXX11_ABI=1'
                 ]
             },
         )

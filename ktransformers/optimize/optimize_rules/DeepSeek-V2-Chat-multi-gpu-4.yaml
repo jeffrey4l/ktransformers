@@ -47,7 +47,7 @@
     kwargs:
       generate_device: "cuda:0"
       prefill_device: "cuda:0"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 - match:
     name: "^model\\.layers\\.([2][0-9]|[1][5-9])\\.(?!self_attn\\.kv_b_proj).*$"  # regular expression 
@@ -57,7 +57,7 @@
     kwargs:
       generate_device: "cuda:1"
       prefill_device: "cuda:1"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 - match:
     name: "^model\\.layers\\.([3][0-9]|[4][0-4])\\.(?!self_attn\\.kv_b_proj).*$"  # regular expression 
@@ -67,7 +67,7 @@
     kwargs:
       generate_device: "cuda:2"
       prefill_device: "cuda:2"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 - match:
     name: "^model\\.layers\\.([5][0-9]|[4][5-9])\\.(?!self_attn\\.kv_b_proj).*$"  # regular expression 
@@ -77,7 +77,7 @@
     kwargs:
       generate_device: "cuda:3"
       prefill_device: "cuda:3"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 - match:
@@ -228,7 +228,7 @@
     kwargs:
       generate_device: "cuda:3"
       prefill_device: "cuda:3"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
       
 - match:

@@ -14,7 +14,7 @@
     kwargs:
       generate_device: "cuda:0"
       prefill_device: "cuda:0"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 - match:
     name: "^model\\.layers\\.([012])\\.mlp$"
@@ -50,7 +50,7 @@
     kwargs:
       generate_device: "cuda:1"
       prefill_device: "cuda:1"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 - match:
     name: "^model\\.layers\\.([12][0-9]|[3-9])\\.mlp$"
@@ -85,7 +85,7 @@
     kwargs:
       generate_device: "cuda:1"
       prefill_device: "cuda:1"
-      generate_op: "KLinearMarlin"
+      generate_op: "KLinearTorch"
       prefill_op: "KLinearTorch"
 
 - match:

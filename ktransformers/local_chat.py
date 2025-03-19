@@ -81,17 +81,17 @@ def local_chat(
             print("using custom modeling_xxx.py.")
             if (
                 "Qwen2Moe" in config.architectures[0]
-            ):  # Qwen2Moe must use flash_attention_2 to avoid overflow.
-                config._attn_implementation = "flash_attention_2"
+            ):  # Qwen2Moe must use eager to avoid overflow.
+                config._attn_implementation = "eager"
             if "Llama" in config.architectures[0]:
                 config._attn_implementation = "eager"
             if "Mixtral" in config.architectures[0]:
-                config._attn_implementation = "flash_attention_2"
+                config._attn_implementation = "eager"
 
             model = custom_models[config.architectures[0]](config)
         else:
             model = AutoModelForCausalLM.from_config(
-                config, trust_remote_code=True, attn_implementation="flash_attention_2"
+                config, trust_remote_code=True, attn_implementation="eager"
             )
 
     if optimize_config_path is None:
