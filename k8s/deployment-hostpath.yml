@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ktransformers
+  labels:
+    app: ktransformers
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ktransformers
+  template:
+    metadata:
+      labels:
+        app: ktransformers
+    spec:
+      runtimeClassName: nvidia
+      containers:
+      - name: ktransformers
+        image: "ktransformer:v0.2.1"
+        imagePullPolicy: IfNotPresent  # 或者 Never，取决于你的需求
+        ports:
+          - containerPort: 10002
+          # local chat
+          # command: ["python", "-m", "ktransformers.local_chat", "--model_path", "deepseek-ai/DeepSeek-R1", "--model_name unsloth/DeepSeek-R1-UD-Q2_K_XL", "--gguf_path", "/opt/models/DeepSeek-R1-UD-Q2_K_XL/", "--cpu_infer", "64", "--optimize_config_path", "ktransformers/optimize/optimize_rules/DeepSeek-V3-Chat-multi-gpu.yaml"]
+
+          # 启动 api
+          # command: ["ktransformers", "--model_path", "deepseek-ai/DeepSeek-R1", "--model_name unsloth/DeepSeek-R1-UD-Q2_K_XL", "--gguf_path", "/opt/models/DeepSeek-R1-UD-Q2_K_XL/", "--cpu_infer", "64", "--optimize_config_path", "ktransformers/optimize/optimize_rules/DeepSeek-V3-Chat-multi-gpu.yaml"]
+        env:
+          - name: http_proxy
+            value: http://1.27.29.178:80
+          - name: https_proxy
+            value: http://1.27.29.178:80
+          - name: HF_ENDPOINT
+            value: https://hf-mirror.com
+        resources:
+          requests:
+             cpu: "80"
+             memory: "300Gi"
+             nvidia.com/gpu: 2
+          limits:
+             cpu: "80"
+             memory: "300Gi"
+             nvidia.com/gpu: 2
+        volumeMounts:
+          - name: models
+            mountPath: /opt/models
+      volumes:
+        - name: models
+          hostPath:
+            path: /opt/models

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ktransformers
+  labels:
+    app: ktransformers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ktransformers
+  template:
+    metadata:
+      labels:
+        app: ktransformers
+    spec:
+      runtimeClassName: nvidia
+      containers:
+      - name: ktransformers
+        image: "ktransformer:v0.2.1"
+        imagePullPolicy: IfNotPresent  # 或者 Never，取决于你的需求
+        ports:
+          - name: api
+            value: 11434
+        resources:
+          requests:
+             cpu: "1000m"
+             memory: "4Gi"
+             nvidia.com/gpu: 1
+          limits:
+             cpu: "4000m"
+             memory: "4Gi"
+             nvidia.com/gpu: 1
+        volumeMounts:
+          - mountPath: /opt/models
+            name: models
+    volumes:
+      - hostPath:
+          path: /opt/models
+        name: models
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ktransformers
+spec:
+  ports:
+    - name: api
+      port: 11434
+      targetPort: api
+  selector:
+    app: ktransformers
